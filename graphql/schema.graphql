@@ -1,0 +1,29 @@
+type Country {
+    name: String!
+    area: Float!
+    population: Int!
+    density: Float!
+}
+
+type Log {
+  id: ID!
+  username: String!
+  request_timestamp: String!
+  num_countries_returned: Int!
+  countries_details: [Country!]! @field(resolver: "App\\GraphQL\\Log\\Resolvers\\CountryLogResolver@countriesDetails")
+}
+
+type Query {
+    topCountries(username: String!, limit: Int!): [Country]
+        @field(resolver: "App\\GraphQL\\Country\\Queries\\TopCountriesQuery@resolve")
+
+    logs(startDate: String, endDate: String): [Log!]!
+        @field(resolver: "App\\GraphQL\\Log\\Queries\\LogsQuery@resolve")
+}
+
+type Mutation {
+    updateLog(id: ID!, username: String!): Log
+        @field(resolver: "App\\GraphQL\\Log\\Mutations\\UpdateLogMutation@resolve")
+    deleteLog(id: ID!): Boolean
+        @field(resolver: "App\\GraphQL\\Log\\Mutations\\DeleteLogMutation")
+}
